@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+    scroll-behavior: smooth;
+  }
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.orangeBg{
+    background: #FC6A11;
+    background: linear-gradient(270deg, #FC6A11, #FE9F4E);
+}
+
+.orangeButton {
+    background-color: #ff5722;
+    transition: all 0.3s ease;
+  }
+  
+  .orangeButton:hover {
+    background-color: #f4511e;
+  }
+  
+body {
+    padding-top: 5rem; /* To account for fixed header */
+  }
+
+/* loader */
+  .loader {
+    @apply relative w-12 h-12 rounded-full bg-transparent transform rotate-45;
+    perspective: 1000px;
+  }
+  .loader::before,
+  .loader::after {
+    @apply absolute top-0 left-0 w-full h-full rounded-full;
+    content: '';
+    transform: rotateX(70deg);
+    animation: spin 1s linear infinite;
+  }
+  .loader::after {
+    @apply text-orange-600;
+    transform: rotateY(70deg);
+    animation-delay: 0.4s;
+  }
+  
+  @keyframes spin {
+    0%, 100% {
+      box-shadow: 0.2em 0 0 0 currentColor;
+    }
+    12% {
+      box-shadow: 0.2em 0.2em 0 0 currentColor;
+    }
+    25% {
+      box-shadow: 0 0.2em 0 0 currentColor;
+    }
+    37% {
+      box-shadow: -0.2em 0.2em 0 0 currentColor;
+    }
+    50% {
+      box-shadow: -0.2em 0 0 0 currentColor;
+    }
+    62% {
+      box-shadow: -0.2em -0.2em 0 0 currentColor;
+    }
+    75% {
+      box-shadow: 0 -0.2em 0 0 currentColor;
+    }
+    87% {
+      box-shadow: 0.2em -0.2em 0 0 currentColor;
+    }
+  }
+  
