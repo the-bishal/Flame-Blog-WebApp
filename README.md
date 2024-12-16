@@ -1,6 +1,6 @@
 # Flame Blog Webapp 🚀
 
-[**https://flameblogs.vercel.app/**](#) 
+[**https://flame-blog-web-app.vercel.app/**](#) 
 
 Flame is a modern and dynamic blog web application built using React. It allows users to create, manage, and explore blog posts with powerful features such as sorting, filtering, and real-time database management using Appwrite.
 
