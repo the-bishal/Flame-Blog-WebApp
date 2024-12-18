@@ -32,7 +32,7 @@ body {
 
 /* loader */
   .loader {
-    @apply relative w-12 h-12 rounded-full bg-transparent transform rotate-45;
+    @apply relative w-6 h-6 rounded-full bg-transparent transform rotate-45;
     perspective: 1000px;
   }
   .loader::before,
@@ -43,7 +43,7 @@ body {
     animation: spin 1s linear infinite;
   }
   .loader::after {
-    @apply text-orange-600;
+    @apply text-black;
     transform: rotateY(70deg);
     animation-delay: 0.4s;
   }

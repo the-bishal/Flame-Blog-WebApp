@@ -5,26 +5,31 @@ import { Button, Input, Logo } from './index'
 import { useDispatch } from 'react-redux'
 import authService from '../appwrite/auth'
 import { useForm } from 'react-hook-form'
+import LoadingSpinner from './LoadingSpinner'
+
 
 function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, formState: {isSubmitting, errors} } = useForm();
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false)
 
     const login = async(data) => {
+        setLoading(true)
         setError('')
         try {
             const session = await authService.login(data);
             if (session) {
                 const userData = await authService.getCurrentUser()
-                console.log("Login wala log : ",userData)
                 if (userData) dispatch(authLogin(userData))
                 navigate('/')
             }
 
         } catch (error) {
             setError("the error message inside login block",error.message)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -90,6 +95,7 @@ function Login() {
                                     type="checkbox" 
                                     id="remember" 
                                     className="h-4 w-4 text-orange-500 focus:ring-orange-500 border-gray-300 rounded"
+                                    {...register('rememberMe')}
                                 />
                                 <label htmlFor="remember" className="ml-2 text-sm text-gray-600">
                                     Remember me
@@ -105,9 +111,10 @@ function Login() {
 
                         <Button
                             type="submit"
-                            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2.5 rounded-lg transition-all duration-200 mt-6"
+                            className="w-full flex items-center justify-center gap-4 bg-orange-500 hover:bg-orange-600 text-white font-medium py-2.5 rounded-lg transition-all duration-200 mt-6"
+                            disabled = {isSubmitting}
                         >
-                            Sign In
+                            {loading ? ' Verifying... ' : 'Sign In'} {isSubmitting ? <LoadingSpinner/> : ''}
                         </Button>
                     </form>
 

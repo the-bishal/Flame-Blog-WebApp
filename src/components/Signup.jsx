@@ -1,18 +1,19 @@
 import React, {useState} from 'react'
 import authService from '../appwrite/auth'
 import { Link, useNavigate } from 'react-router-dom'
-import { login } from '../store/authSlice'
+// import { login } from '../store/authSlice'
 import { Button, Input, Logo } from './index'
-import { useDispatch } from 'react-redux'
+// import { useDispatch } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import SignupImg from '../assets/signup.jpg'
+import LoadingSpinner from './LoadingSpinner'
 
 function Signup() {
     const navigate = useNavigate()
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
-    const {register, handleSubmit} = useForm()
-    const dispatch = useDispatch()
+    const {register, handleSubmit, formState:{errors, isSubmitting}} = useForm()
+    // const dispatch = useDispatch()
 
     const create = async(data) => {
         setError('')
@@ -20,9 +21,11 @@ function Signup() {
         try {
             const userData = await authService.createAccount(data)
             if (userData) {
-                const currentUser = await authService.getCurrentUser();
-                if (currentUser) dispatch(login(currentUser))
-                navigate('/')
+                // const currentUser = await authService.getCurrentUser();
+                // if (currentUser) dispatch(login(currentUser))
+                // console.log("Current User after Signup",currentUser)
+                console.log("Account Created Successfully")
+                navigate('/login')
             }
         } catch (error) {
             setError(error.message)
@@ -101,10 +104,10 @@ function Signup() {
 
                     <Button
                         type="submit"
-                        className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2.5 rounded-lg transition-all duration-200 mt-6"
+                        className="w-full flex items-center justify-center gap-4 bg-orange-500 hover:bg-orange-600 text-white font-medium py-2.5 rounded-lg transition-all duration-200 mt-6"
                         disabled={loading}
                     >
-                        {loading ? "Creating Account..." : "Sign Up"}
+                        {loading ? "Creating Account..." : "Sign Up"} {isSubmitting ? <LoadingSpinner/> : ''}
                     </Button>
                 </form>
 

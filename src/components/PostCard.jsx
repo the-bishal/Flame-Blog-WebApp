@@ -5,7 +5,7 @@ import parse from "html-react-parser";
 
 function PostCard({$id, title, featuredImage, content, bgColor}) {
   return (
-    <div className={`w-full sm:w-[350px] h-[450px] bg-${bgColor} rounded-lg shadow-md overflow-hidden`}>
+    <div className={`w-full sm:w-[350px] h-[450px] bg-${bgColor} rounded-lg shadow-md overflow-hidden p-b`}>
       {/* Image Container - Fixed height */}
       <div className='w-full h-48'>
         <img 
@@ -16,9 +16,9 @@ function PostCard({$id, title, featuredImage, content, bgColor}) {
       </div>
 
       {/* Content Container - Fixed height with flex grow */}
-      <div className='flex flex-col h-[calc(450px-192px)] p-4'>
+      <div className='flex flex-col h-[calc(450px-192px)] p-4 '>
         {/* Title - Allow up to 3 lines */}
-        <h2 className='text-xl font-bold mb-3 line-clamp-2 min-h-[4rem]'>{title}</h2>
+        <h2 className='text-xl font-bold mb-3 line-clamp-2 min-h-[3.5rem]'>{title}</h2>
 
         {/* Content - Allow up to 6 lines */}
         <div className='flex-grow overflow-hidden mb-4'>

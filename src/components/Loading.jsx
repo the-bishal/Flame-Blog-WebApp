@@ -1,6 +1,6 @@
 import React from 'react'
 
-function Loading(loadingText) {
+function Loading({loadingText}) {
   return (
     <div>
       

@@ -2,7 +2,7 @@ import React from 'react'
 
 function LoadingSpinner() {
   return (
-      <span className="loader"></span>
+      <div className="loader h-full w-full"></div>
   )
 }
 

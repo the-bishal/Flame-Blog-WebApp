@@ -1,24 +1,30 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Button, Input, Select, RTE } from '../index' 
 import appwriteService from '../../appwrite/config'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { linearGradient } from 'framer-motion/client'
+import LoadingSpinner from '../LoadingSpinner'
 
 function PostForm({post}) {
 
     console.log("post", post)
+    const [loading, setLoading] = useState(false)
+    const [isUpdate, setIsUpdate] = useState(false)
 
-    const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
+    const { register, handleSubmit, watch, setValue, control, getValues, formState: {isSubmitting, errors} } = useForm({
         defaultValues: {
             title : post?.title || '',
-             slug : post?.slug || '',
+             slug : post?.$id || '',
              content : post?.content || '',
              status : post?.status || 'active',
              category : post?.category || 'Not Specified',
         }
     });
+
+    useEffect(()=> {
+        if(post) setIsUpdate(true)
+    },[])
 
     const navigate = useNavigate();
     const userData = useSelector((state) =>state.auth?.userData)
@@ -26,10 +32,11 @@ function PostForm({post}) {
 
     const submit = async (data) => {
         if(post) {
-            const file = data.image[0] ? appwriteService.uploadFile(data.image[0]) : null
+            const file = data.image[0] ? await appwriteService.uploadFile(data.image[0]) : null
 
             //deleting the old image because we are updating it 
             if(file) {
+                console.log('inside file of del', post.featuredImage)
                 appwriteService.deleteFile(post.featuredImage)
             }
 
@@ -41,6 +48,7 @@ function PostForm({post}) {
 
             if (dbPost) {
                 console.log('inside dbpost check')
+                //updated successfull message
                 navigate(`/post/${dbPost.$id}`)
             }
             
@@ -108,6 +116,7 @@ function PostForm({post}) {
                     onInput={(e) => {
                         setValue("slug", slugTransform(e.currentTarget.value), { shouldValidate: true });
                     }}
+                    readOnly = {isUpdate ? true : false} 
                 />
                 <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
             </div>
@@ -142,8 +151,8 @@ function PostForm({post}) {
                     {...register("category", { required: true })}
                 />
 
-                <Button type="submit" bgColor={post ? "bg-green-500" : undefined} className="w-full ">
-                    {post ? "Update" : "Submit"}
+                <Button type="submit" textColor='text-white' bgColor={post ? "bg-green-500" : undefined} className="w-full flex items-center justify-center gap-4" disabled={isSubmitting}>
+                    {post ? (isSubmitting ? "Updating..." : "Update") : (isSubmitting ? "Submitting..." : "Submit")} {isSubmitting ? <LoadingSpinner/> : ''}
                 </Button>
             </div>
         </form>
