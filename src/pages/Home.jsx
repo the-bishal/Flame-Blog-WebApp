@@ -6,23 +6,25 @@ import LargeCards from '../components/LargeCards'
 import HomeImg from '../assets/home.png'
 import { useNavigate } from 'react-router-dom'
 import LoadingSpinner from '../components/LoadingSpinner'
+import Loading from '../components/Loading'
 
 function Home() {
     const [posts, setPosts] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
     const stateUserData = useSelector((state) => state.auth.userData)
-    console.log("stateUserData",stateUserData)
     const navigate = useNavigate()
 
     useEffect(() => {
+        setIsLoading(true)
         appwriteService.getPosts().then((posts) => {
-            console.log("stateUserData",stateUserData)
             if(posts){
                 setPosts(posts.documents)
             }
         })
+        setIsLoading(false)
     }, [])
 
-    return (
+    return !isLoading ? (
         <div className="min-h-screen">
             {/* Hero Section */}
             <div className="w-full bg-orange-50 py-20">
@@ -113,7 +115,7 @@ function Home() {
                 </Container>
             </div>
         </div>
-    )
+    ) : <Loading loadingText = "Loading Posts"/>
 }
 
 export default Home

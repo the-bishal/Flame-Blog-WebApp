@@ -10,7 +10,7 @@ export default {
         primary: '#FF5E0E',
       },
       fontFamily: {
-        'playfair': ['"Playfair Display"', 'serif'],
+        'leagueSpartan': ['"League Spartan"', 'serif'],
         'poppins': ['Poppins', 'sans-serif'],
       },
     },

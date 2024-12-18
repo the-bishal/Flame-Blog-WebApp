@@ -2,24 +2,29 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import appwriteService from '../appwrite/config'
 import { Container, PostCard } from '../components/'
+import Loading from '../components/Loading'
 
 function AllPosts() {
     const [posts, setPosts] = useState([])
     const [filteredPosts, setFilteredPosts] = useState([])
     const [selectedCategory, setSelectedCategory] = useState('all')
     const [sortBy, setSortBy] = useState('newest')
+    const [isLoading, setIsLoading] = useState(false)
     
     useEffect(() => {
+        setIsLoading(true)
         appwriteService.getPosts([]).then((posts) => {
           if (posts) {
             setPosts(posts.documents)
             setFilteredPosts(posts.documents)
           }
         })
+        setIsLoading(false)
     }, [])
 
     // Filter and sort posts
     useEffect(() => {
+        setIsLoading(true)
         let result = [...posts]
         
         // Apply category filter
@@ -33,6 +38,7 @@ function AllPosts() {
         } else if (sortBy === 'oldest') {
             result.sort((a, b) => new Date(a.$createdAt) - new Date(b.$createdAt))
         }
+        setIsLoading(false)
         
         setFilteredPosts(result)
     }, [selectedCategory, sortBy, posts])
@@ -40,7 +46,7 @@ function AllPosts() {
     // Get unique categories from posts
     const categories = ['all', ...new Set(posts.filter(post => post?.category).map(post => post.category))]
 
-    return (
+    return !isLoading ? (
         <div className='w-full min-h-screen py-8 bg-orange-50'>
             <Container>
                 {/* Filter Section */}
@@ -78,7 +84,7 @@ function AllPosts() {
                 {/* Posts Grid */}
                 {filteredPosts.length === 0 ? (
                     <div className="text-center py-10">
-                        <h2 className="text-2xl font-semibold text-gray-600">No posts found</h2>
+                        <h2 className="text-2xl font-semibold text-gray-600">Loading Posts...</h2>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -91,7 +97,7 @@ function AllPosts() {
                 )}
             </Container>
         </div>
-    )
+    ) : <Loading loadingText="Loading All Posts" />
 }
 
 export default AllPosts
